@@ -45,5 +45,15 @@ public class Controller {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/users/increment-post-count/{id}")
+    public ResponseEntity <UserEntity> incrementPostCount(@PathVariable Long id) {
+        return ResponseEntity.ok(userDataService.incrementPostCount(id));
+    }
+
+    @PostMapping("/users/decrement-post-count/{id}")
+    public ResponseEntity <UserEntity> decrementPostCount(@PathVariable Long id) {
+        return ResponseEntity.ok(userDataService.decrementPostCount(id));
+    }
+
 
 }

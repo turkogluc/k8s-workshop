@@ -38,4 +38,22 @@ public class UserDataService {
                 .orElseThrow(() -> new NoSuchElementException("No user found for id: " + id));
         userRepository.delete(userEntity);
     }
+
+    @Transactional
+    public UserEntity incrementPostCount(Long userId) {
+        final UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("No user found for id: " + userId));
+
+        userEntity.setAmountOfPosts(userEntity.getAmountOfPosts() + 1);
+        return userRepository.save(userEntity);
+    }
+
+    @Transactional
+    public UserEntity decrementPostCount(Long userId) {
+        final UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("No user found for id: " + userId));
+
+        userEntity.setAmountOfPosts(userEntity.getAmountOfPosts() - 1);
+        return userRepository.save(userEntity);
+    }
 }
