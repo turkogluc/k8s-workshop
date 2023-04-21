@@ -1,0 +1,27 @@
+version: "3.5"
+services:
+  "user-db":
+    image: "postgres:13"
+    container_name: "user-db"
+    environment:
+      - POSTGRES_DB=userdb
+      - POSTGRES_USER=master
+      - POSTGRES_PASSWORD=userdb_password
+
+    ports:
+      - "54321:5432"
+    restart: "no"
+
+  "post-db":
+    image: "postgres:13"
+    container_name: "post-db"
+    environment:
+      - POSTGRES_DB=postdb
+      - POSTGRES_USER=master
+      - POSTGRES_PASSWORD=postdb_password
+
+    ports:
+      - "54322:5432"
+    restart: "no"
+
+
