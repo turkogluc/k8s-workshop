@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: user-db-ss
+  namespace: k8s-program
+spec:
+  selector:
+    matchLabels:
+      app: user-db
+  serviceName: user-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: user-db
+    spec:
+      containers:
+        - name: user-db-postgres
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+              name: user-db-port
+          env:
+            - name: POSTGRES_DB
+              value: userdb
+            - name: POSTGRES_USER
+              value: master
+            - name: POSTGRES_PASSWORD
+              value: userdb_password
+          volumeMounts:
+            - name: userdb-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: userdb-data
+          persistentVolumeClaim:
+            claimName: userdb-data
+  volumeClaimTemplates:
+    - metadata:
+        name: userdb-data
+      spec:
+        storageClassName: hostpath
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: userdb
+  namespace: k8s-program
+spec:
+  selector:
+    app: user-db
+  ports:
+    - name: user-db-port
+      port: 5432
+      targetPort: 5432
+  clusterIP: None
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: post-db-ss
+  namespace: k8s-program
+spec:
+  selector:
+    matchLabels:
+      app: post-db
+  serviceName: post-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: post-db
+    spec:
+      containers:
+        - name: post-db-postgres
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+              name: post-db-port
+          env:
+            - name: POSTGRES_DB
+              value: postdb
+            - name: POSTGRES_USER
+              value: master
+            - name: POSTGRES_PASSWORD
+              value: postdb_password
+          volumeMounts:
+            - name: postdb-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postdb-data
+          persistentVolumeClaim:
+            claimName: postdb-data
+  volumeClaimTemplates:
+    - metadata:
+        name: postdb-data
+      spec:
+        storageClassName: hostpath
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postdb
+  namespace: k8s-program
+spec:
+  selector:
+    app: post-db
+  ports:
+    - name: post-db-port
+      port: 5432
+      targetPort: 5432
+  clusterIP: None
+---

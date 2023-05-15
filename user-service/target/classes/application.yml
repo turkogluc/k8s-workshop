@@ -1,15 +1,11 @@
 spring:
   datasource:
-    url: "jdbc:postgresql://localhost:54322/postdb"
+    url: "jdbc:postgresql://localhost:54321/userdb"
     username: "master"
-    password: "postdb_password"
+    password: "userdb_password"
 
   jpa:
     hibernate:
       ddl-auto: update
 
     database-platform: "org.hibernate.dialect.PostgreSQLDialect"
-
-service:
-  user:
-    url: "http://localhost:8090"
