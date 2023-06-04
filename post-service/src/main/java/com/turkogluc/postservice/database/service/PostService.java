@@ -40,6 +40,7 @@ public class PostService {
         postEntity.setPostedAt(LocalDate.now());
         postEntity.setAuthorId(postRequest.getAuthorId());
         postEntity.setText(postRequest.getText());
+        postEntity.setTopic(postRequest.getTopic());
         final PostEntity postEntitySaved = postRepository.save(postEntity);
         incrementUserPostCount(postEntitySaved.getAuthorId());
         return postEntitySaved;

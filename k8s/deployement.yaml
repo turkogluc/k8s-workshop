@@ -18,15 +18,37 @@ spec:
       containers:
       - name: user-api
         image: turkogluc/user-service:1.0.0
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 15
         env:
           - name: SPRING_DATASOURCE_URL
-            value: "jdbc:postgresql://userdb:5432/postgres"
+            valueFrom:
+              configMapKeyRef:
+                name: user-config-map
+                key: SPRING_DATASOURCE_URL
           - name: SPRING_DATASOURCE_USERNAME
-            value: "master"
+            valueFrom:
+              secretKeyRef:
+                name: user-db-credentials
+                key: username
           - name: SPRING_DATASOURCE_PASSWORD
-            value: "userdb_password"
+            valueFrom:
+              secretKeyRef:
+                name: user-db-credentials
+                key: password
 
 ---
 
@@ -59,6 +81,11 @@ spec:
   selector:
     matchLabels:
       app: post-api
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
   template:
     metadata:
       labels:
@@ -66,19 +93,45 @@ spec:
     spec:
       containers:
       - name: post-api
-        image: turkogluc/post-service:1.0.0
+        image: turkogluc/post-service:1.2.0
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 15
         env:
           - name: SPRING_DATASOURCE_URL
-            value: "jdbc:postgresql://postdb:5432/postgres"
+            valueFrom:
+              configMapKeyRef:
+                name: post-config-map
+                key: SPRING_DATASOURCE_URL
           - name: SPRING_DATASOURCE_USERNAME
-            value: "master"
+            valueFrom:
+              secretKeyRef:
+                name: post-db-credentials
+                key: username
           - name: SPRING_DATASOURCE_PASSWORD
-            value: "postdb_password"
+            valueFrom:
+              secretKeyRef:
+                name: post-db-credentials
+                key: password
           - name: SERVICE_USER_URL
             value: "http://user-service:8080"
 
+# Rollback commands
+#kubectl rollout history deployment post-deployment
+#kubectl rollout undo deployment post-deployment --to-revision=1
+#kubectl rollout status deployment post-deployment
 ---
 
 apiVersion: v1

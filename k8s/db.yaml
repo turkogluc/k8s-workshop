@@ -24,16 +24,28 @@ spec:
             - name: POSTGRES_DB
               value: userdb
             - name: POSTGRES_USER
-              value: master
+              valueFrom:
+                secretKeyRef:
+                  name: user-db-credentials
+                  key: username
             - name: POSTGRES_PASSWORD
-              value: userdb_password
+              valueFrom:
+                secretKeyRef:
+                  name: user-db-credentials
+                  key: password
           volumeMounts:
             - name: userdb-data
               mountPath: /var/lib/postgresql/data
+            - name: initdb-scripts
+              mountPath: /docker-entrypoint-initdb.d
+              readOnly: true
       volumes:
         - name: userdb-data
           persistentVolumeClaim:
             claimName: userdb-data
+        - name: initdb-scripts
+          configMap:
+            name: userdb-init-scripts
   volumeClaimTemplates:
     - metadata:
         name: userdb-data
@@ -86,16 +98,29 @@ spec:
             - name: POSTGRES_DB
               value: postdb
             - name: POSTGRES_USER
-              value: master
+              valueFrom:
+                secretKeyRef:
+                  name: post-db-credentials
+                  key: username
             - name: POSTGRES_PASSWORD
-              value: postdb_password
+              valueFrom:
+                secretKeyRef:
+                  name: post-db-credentials
+                  key: password
           volumeMounts:
             - name: postdb-data
               mountPath: /var/lib/postgresql/data
+            - name: initdb-scripts
+              mountPath: /docker-entrypoint-initdb.d
+              readOnly: true
       volumes:
         - name: postdb-data
           persistentVolumeClaim:
             claimName: postdb-data
+        - name: initdb-scripts
+          configMap:
+            name: postdb-init-scripts
+
   volumeClaimTemplates:
     - metadata:
         name: postdb-data

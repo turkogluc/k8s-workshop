@@ -12,4 +12,6 @@ public class PostRequest {
 
     @NotBlank
     String text;
+
+    String topic;
 }

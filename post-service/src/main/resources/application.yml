@@ -10,6 +10,12 @@ spring:
 
     database-platform: "org.hibernate.dialect.PostgreSQLDialect"
 
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
 service:
   user:
     url: "http://localhost:8090"

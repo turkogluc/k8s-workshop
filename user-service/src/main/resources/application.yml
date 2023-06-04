@@ -7,3 +7,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+    database-platform: "org.hibernate.dialect.PostgreSQLDialect"
+
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true

@@ -21,6 +21,7 @@ public class PostEntity {
     private Long authorId;
 
     private String text;
+    private String topic;
 
     private LocalDate postedAt;
 }
