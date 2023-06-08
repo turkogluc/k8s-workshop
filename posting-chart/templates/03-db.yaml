@@ -16,13 +16,13 @@ spec:
     spec:
       containers:
         - name: user-db-postgres
-          image: postgres:latest
+          image: {{ .Values.db.user.image }}
           ports:
             - containerPort: 5432
               name: user-db-port
           env:
             - name: POSTGRES_DB
-              value: userdb
+              value: {{ .Values.db.user.database }}
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
@@ -69,7 +69,7 @@ spec:
     - name: user-db-port
       port: 5432
       targetPort: 5432
-  clusterIP: None
+
 ---
 
 apiVersion: apps/v1
@@ -90,13 +90,13 @@ spec:
     spec:
       containers:
         - name: post-db-postgres
-          image: postgres:latest
+          image: {{ .Values.db.post.image }}
           ports:
             - containerPort: 5432
               name: post-db-port
           env:
             - name: POSTGRES_DB
-              value: postdb
+              value: {{ .Values.db.post.database }}
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
@@ -144,5 +144,5 @@ spec:
     - name: post-db-port
       port: 5432
       targetPort: 5432
-  clusterIP: None
+
 ---

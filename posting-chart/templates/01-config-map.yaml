@@ -4,7 +4,7 @@ metadata:
   name: user-config-map
   namespace: {{ .Values.namespace }}
 data:
-  SPRING_DATASOURCE_URL: "jdbc:postgresql://userdb:5432/postgres"
+  SPRING_DATASOURCE_URL: "{{ .Values.db.user.url }}"
 ---
 
 apiVersion: v1
@@ -13,7 +13,7 @@ metadata:
   name: post-config-map
   namespace: {{ .Values.namespace }}
 data:
-  SPRING_DATASOURCE_URL: "jdbc:postgresql://postdb:5432/postgres"
+  SPRING_DATASOURCE_URL: "{{ .Values.db.post.url }}"
 
 ---
 
@@ -47,7 +47,3 @@ data:
         posted_at date,
         text varchar(255)
     );
-
-
-
-
