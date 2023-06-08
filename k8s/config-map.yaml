@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: user-config-map
-  namespace: {{ .Values.namespace }}
+  namespace: k8s-program
 data:
   SPRING_DATASOURCE_URL: "jdbc:postgresql://userdb:5432/postgres"
 ---
@@ -11,7 +11,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: post-config-map
-  namespace: {{ .Values.namespace }}
+  namespace: k8s-program
 data:
   SPRING_DATASOURCE_URL: "jdbc:postgresql://postdb:5432/postgres"
 
@@ -21,7 +21,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: userdb-init-scripts
-  namespace: {{ .Values.namespace }}
+  namespace: k8s-program
 data:
   create-tables.sql: |
     create table if not exists public.user_details
@@ -37,7 +37,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: postdb-init-scripts
-  namespace: {{ .Values.namespace }}
+  namespace: k8s-program
 data:
   create-tables.sql: |
     create table if not exists public.post_details

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: user-db-ss
-  namespace: {{ .Values.namespace }}
+  namespace: k8s-program
 spec:
   selector:
     matchLabels:
@@ -61,7 +61,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: userdb
-  namespace: {{ .Values.namespace }}
+  namespace: k8s-program
 spec:
   selector:
     app: user-db
@@ -76,7 +76,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: post-db-ss
-  namespace: {{ .Values.namespace }}
+  namespace: k8s-program
 spec:
   selector:
     matchLabels:
@@ -136,7 +136,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postdb
-  namespace: {{ .Values.namespace }}
+  namespace: k8s-program
 spec:
   selector:
     app: post-db

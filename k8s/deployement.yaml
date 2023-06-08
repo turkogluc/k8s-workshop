@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: user-deployment
-  namespace: {{ .Values.namespace }}
+  namespace: k8s-program
   labels:
     deployment: user
 spec:
@@ -56,7 +56,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: user-service
-  namespace: {{ .Values.namespace }}
+  namespace: k8s-program
 spec:
   type: NodePort
   selector:
@@ -73,7 +73,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: post-deployment
-  namespace: {{ .Values.namespace }}
+  namespace: k8s-program
   labels:
     deployment: post
 spec:
@@ -138,7 +138,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: post-service
-  namespace: {{ .Values.namespace }}
+  namespace: k8s-program
 spec:
   type: NodePort
   selector:
