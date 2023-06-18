@@ -16,15 +16,13 @@ db:
 app:
   user:
     replica: 2
-    image: "turkogluc/user-service:1.0.0"
-    serviceType: "NodePort"
-    nodePort: 30090
+    image: "turkogluc/user-service:1.3.0"
+    serviceType: "ClusterIP"
 
   post:
     replica: 2
-    image: "turkogluc/post-service:1.2.0"
-    serviceType: "NodePort"
-    nodePort: 30095
+    image: "turkogluc/post-service:1.3.0"
+    serviceType: "ClusterIP"
     userServiceUrl: "http://user-service:8080"
 
 namespace: "k8s-program"

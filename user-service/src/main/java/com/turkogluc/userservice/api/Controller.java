@@ -8,52 +8,60 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class Controller {
 
     private final UserDataService userDataService;
 
     @GetMapping("/greeting")
-    public ResponseEntity <String> greeting() {
-        return ResponseEntity.ok("Hello, k8s!");
+    public ResponseEntity <String> greeting() throws UnknownHostException {
+        return ResponseEntity.ok("Hello, k8s! Host: " + InetAddress.getLocalHost().getHostName());
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity <UserEntity> findById(@PathVariable Long id) {
         final Optional <UserEntity> userEntityOpt = userDataService.findById(id);
         return userEntityOpt.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/users")
+    @GetMapping
+    public List <UserEntity> findAll() {
+        return userDataService.findAll();
+    }
+
+    @PostMapping
     public ResponseEntity <UserEntity> insertUser(@RequestBody @Valid UserRequest userRequest) {
         final UserEntity userEntity = userDataService.save(userRequest, Optional.empty());
         return ResponseEntity.ok(userEntity);
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity <UserEntity> updateUser(@RequestBody @Valid UserRequest userRequest, @PathVariable Long id) {
         final UserEntity userEntity = userDataService.save(userRequest, Optional.of(id));
         return ResponseEntity.ok(userEntity);
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity <?> deleteUser(@PathVariable Long id) {
         userDataService.deleteById(id);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/users/increment-post-count/{id}")
+    @PostMapping("/increment-post-count/{id}")
     public ResponseEntity <UserEntity> incrementPostCount(@PathVariable Long id) {
         return ResponseEntity.ok(userDataService.incrementPostCount(id));
     }
 
-    @PostMapping("/users/decrement-post-count/{id}")
+    @PostMapping("/decrement-post-count/{id}")
     public ResponseEntity <UserEntity> decrementPostCount(@PathVariable Long id) {
         return ResponseEntity.ok(userDataService.decrementPostCount(id));
     }
-
 
 }

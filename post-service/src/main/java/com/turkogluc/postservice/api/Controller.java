@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/api/posts")
 @RequiredArgsConstructor
 public class Controller {
 
@@ -22,24 +23,24 @@ public class Controller {
         return ResponseEntity.ok("Hello, k8s!");
     }
 
-    @GetMapping("/posts/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity <PostEntity> findById(@PathVariable Long id) {
         return ResponseEntity.of(postService.findById(id));
     }
 
-    @PostMapping("/posts")
+    @PostMapping
     public ResponseEntity <PostEntity> save(@RequestBody @Valid PostRequest postRequest) {
         final PostEntity entity = postService.save(postRequest, Optional.empty());
         return ResponseEntity.ok(entity);
     }
 
-    @PutMapping("/posts/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity <PostEntity> update(@RequestBody @Valid PostRequest postRequest, @PathVariable Long id) {
         final PostEntity entity = postService.save(postRequest, Optional.of(id));
         return ResponseEntity.ok(entity);
     }
 
-    @DeleteMapping("/posts/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity <?> delete(@PathVariable Long id) {
         postService.deleteById(id);
         return ResponseEntity.ok().build();

@@ -65,7 +65,6 @@ spec:
     - name: http
       port: 8080
       targetPort: 8080
-      nodePort: {{ .Values.app.user.nodePort }}
 
 ---
 
@@ -147,4 +146,3 @@ spec:
     - name: http
       port: 8080
       targetPort: 8080
-      nodePort: {{ .Values.app.post.nodePort }}
